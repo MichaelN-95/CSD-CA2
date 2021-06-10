@@ -104,30 +104,34 @@ public class GameCharacter {
     // When the eat method is invoked, the character's status should also change to "Eating"
     // Return true if the item was food and consumed, otherwise false
     public boolean eat(int inventoryFoodIndex) {
-        Item selectedItem = (Item) inventory.get(inventoryFoodIndex);
-        double calories = 0.00;
-        if (selectedItem instanceof Food) {
-            calories = (((selectedItem.getItemWeight() / 100) * ((Food) selectedItem).getCalories()));
-            switch (((Food) selectedItem).getFoodState()) {
-                case Fresh -> {
-                    health += (calories / 25.00);
-                    return true;
-                }
-                case Stale -> {
-                    health += (calories * 0.6) / 25.00;
-                    return true;
-                }
-                case Mouldy -> {
-                    health += (calories * .4) / 25.00;
-                    return true;
-                }
-                case Rotten -> {
-                    health += (calories * .1);
-                    return true;
+        if (isCharDead()) {
+            Item selectedItem = (Item) inventory.get(inventoryFoodIndex);
+            double calories = 0.00;
+            if (selectedItem instanceof Food) {
+                calories = (((selectedItem.getItemWeight() / 100) * ((Food) selectedItem).getCalories()));
+                switch (((Food) selectedItem).getFoodState()) {
+                    case Fresh -> {
+                        health += (calories / 25.00);
+                        return true;
+                    }
+                    case Stale -> {
+                        health += (calories * 0.6) / 25.00;
+                        return true;
+                    }
+                    case Mouldy -> {
+                        health += (calories * .4) / 25.00;
+                        return true;
+                    }
+                    case Rotten -> {
+                        health += (calories * .1);
+                        return true;
+                    }
                 }
             }
+            System.out.println("Selected Item is not food!");
+            return false;
         }
-        System.out.println("Selected Item is not food!");
+        System.out.println("You are dead");
         return false;
     }
 
@@ -189,11 +193,13 @@ public class GameCharacter {
     // If the item in the inventory at inventoryWeaponIndex is a weapon, unequip it and return true, otherwise false
     // Weapons that are unequipped remain in the inventory.
     public boolean unEquipWeapon(int inventoryWeaponIndex){
-        if(inventory.get(inventoryWeaponIndex) instanceof Weapon){
-            ((Weapon) inventory.get(inventoryWeaponIndex)).setWeaponEquipped(false);
-            return true;
+        if (isCharDead()) {
+            if(inventory.get(inventoryWeaponIndex) instanceof Weapon){
+                ((Weapon) inventory.get(inventoryWeaponIndex)).setWeaponEquipped(false);
+                return true;
+            }
+            System.out.println("Not a weapon");
         }
-        System.out.println("Not a weapon");
         return false;
     }
 
@@ -202,71 +208,86 @@ public class GameCharacter {
     // argument points to another shield, then the shield at armourIndex is equipped instead. If the armourIndex points
     // to a wearable piece of armour the GameCharacter should put it on. The character may wear multiple pieces of armour
     public boolean equipArmour(int armourIndex) {
-        //if item at selected index is a weapon assign and cast to a selected weapon
-        if (inventory.get(armourIndex) instanceof Armour){
-            Armour selected = (Armour) inventory.get(armourIndex);
-            if (selected.getArmourType()== ArmourTypes.Hold) {
-                //loop through all items to check if any are equipped
-                for (Object check: inventory) {
-                    //if item is armour assign to a temp armour item and set equiped to false
-                    if (((Armour) check).getArmourType()==ArmourTypes.Hold){
-                        ((Armour) check).setEquipped(false);
+        if (isCharDead()) {
+            //if item at selected index is a weapon assign and cast to a selected weapon
+            if (inventory.get(armourIndex) instanceof Armour){
+                Armour selected = (Armour) inventory.get(armourIndex);
+                if (selected.getArmourType()== ArmourTypes.Hold) {
+                    //loop through all items to check if any are equipped
+                    for (Object check: inventory) {
+                        //if item is armour assign to a temp armour item and set equiped to false
+                        if (((Armour) check).getArmourType()==ArmourTypes.Hold){
+                            ((Armour) check).setEquipped(false);
+                        }
                     }
                 }
+                selected.setEquipped(true);
+                return true;
             }
-            selected.setEquipped(true);
-            return true;
+            else {
+                System.out.println("Item at " + armourIndex + " is not Armour!");
+                return false;
+            }
         }
-        else {
-            System.out.println("Item at " + armourIndex + " is not Armour!");
-            return false;
-        }
+        System.out.println("You are dead!");
+        return false;
     }
 
     // The method should remove the item of armour at armourIndex from the gameCharacter. The character essentially
     // takes off the piece of armour but it remains in their inventory
     public void removeArmour(int armourIndex){
-        if(inventory.get(armourIndex) instanceof Armour){
-            ((Armour) inventory.get(armourIndex)).setEquipped(false);
-        }
-        else {
-            System.out.println("Not Armour");
+        if (isCharDead()) {
+            if(inventory.get(armourIndex) instanceof Armour){
+                ((Armour) inventory.get(armourIndex)).setEquipped(false);
+            }
+            else {
+                System.out.println("Not Armour");
+            }
         }
     }
 
     // The defend method should set the characters state to defending
     public void defend(){
-        characterState = CharacterState.Defending;
+        if (isCharDead()) {
+            characterState = CharacterState.Defending;
+        }
     }
 
     // The method should change the characters state to walking
     public void walk(){
-        characterState = CharacterState.Walking;
+        if (isCharDead()) {
+            characterState = CharacterState.Walking;
+        }
     }
 
     // The method should change the characters state to running
     public void run(){
-        characterState = CharacterState.Running;
+        if (isCharDead()) {
+            characterState = CharacterState.Running;
+        }
     }
 
     // The method should change the characters state to sleeping
     // The character's health should increase by 20 but should not exceed the maximum (100)
     public void sleep(){
-        //TODO - Complete this method
-        this.characterState = CharacterState.Sleeping;
-        if (health<=80){
-            health+=20;
-        }
-        else{
-            health=100;
+        if (isCharDead()) {
+            this.characterState = CharacterState.Sleeping;
+            if (health<=80){
+                health+=20;
+            }
+            else{
+                health=100;
+            }
         }
     }
 
     // If the character is sleeping the wakeUp method should change the character's state to Idle
     // If the character is not sleeping, the method should not change the character's state.
     public void wakeUp(){
-        if (characterState== CharacterState.Sleeping){
-            characterState = CharacterState.Idle;
+        if (isCharDead()) {
+            if (characterState== CharacterState.Sleeping){
+                characterState = CharacterState.Idle;
+            }
         }
     }
 
@@ -300,27 +321,34 @@ public class GameCharacter {
     // The defence value is determined by totalling the armourDefence values of all armour items currently equipped
     // by the game character
     public double getCharacterDefence() {
-        double totalDefence =0;
-        for (Object check: inventory) {
-            //if item is armour assign to a temp armour item and set equiped to false
-            if (check instanceof Armour && ((Armour) check).isEquipped()){
-                totalDefence += ((Armour) check).getArmourDefence();
+        if (isCharDead()) {
+            double totalDefence =0;
+            for (Object check: inventory) {
+                //if item is armour assign to a temp armour item and set equiped to false
+                if (check instanceof Armour && ((Armour) check).isEquipped()){
+                    totalDefence += ((Armour) check).getArmourDefence();
+                }
             }
+            return totalDefence;
         }
-        return totalDefence;
+        System.out.println("You are dead!");
+        return 0;
     }
 
     // The attack value is determined by totalling the weaponHitStrength values of all weapons currently equipped
     // by the game character
     public double getCharacterAttackValue() {
-        double totalAttack =0;
-        for (Object check: inventory) {
-            //if item is armour assign to a temp armour item and set equiped to false
-            if (check instanceof Weapon && ((Weapon) check).isWeaponEquipped()){
-                totalAttack += ((Weapon) check).getWeaponHitStrength();
+        if (isCharDead()) {
+            double totalAttack =0;
+            for (Object check: inventory) {
+                //if item is armour assign to a temp armour item and set equiped to false
+                if (check instanceof Weapon && ((Weapon) check).isWeaponEquipped()){
+                    totalAttack += ((Weapon) check).getWeaponHitStrength();
+                }
             }
+            return totalAttack;
         }
-        return totalAttack;
+        return 0;
     }
 
     // Note - You can implement additional supporting private methods if you want. Add them below this section
