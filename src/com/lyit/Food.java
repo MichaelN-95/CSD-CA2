@@ -3,16 +3,16 @@
  *
  * Version information
  *
- * Date 30/01/2021
+ * Date 11/06/2021
  *
- * Author: <Insert your Name and StudentID
+ * Author: <Michael Norman L00162933
  *
  * Copyright notice
  */
 
 package com.lyit;
 
-enum FoodState {Fresh, Stale, Mouldy, Rotten};
+enum FoodState {Fresh, Stale, Mouldy, Rotten}
 
 public class Food extends Item {
 
@@ -34,7 +34,8 @@ public class Food extends Item {
         return foodState;
     }
 
-    public void setFoodState(FoodState foodState) {
+    public void setFoodState(FoodState foodState) throws IllegalArgumentException {
+        if (foodState == null) throw new IllegalArgumentException("Food state cannot be null");
         this.foodState = foodState;
     }
 
@@ -42,7 +43,8 @@ public class Food extends Item {
         return calories;
     }
 
-    public void setCalories(int calories) {
+    public void setCalories(int calories) throws IllegalArgumentException{
+        if (calories<1)throw new IllegalArgumentException("Calories must be greater than 0");
         this.calories = calories;
     }
 
@@ -51,6 +53,8 @@ public class Food extends Item {
     // If an invalid argument is provided throw an IllegalArgumentException exception
     public Food(String itemName, double itemWeight, double itemValue, int itemMagic, FoodState foodState, double foodWeight, int calories) {
         super(itemName, itemWeight, itemValue, itemMagic);
+        if (foodState ==null || foodWeight <1 || calories <0)throw new IllegalArgumentException("Invalid Food arguments provided");
+
         this.foodState = foodState;
         this.calories = calories;
     }

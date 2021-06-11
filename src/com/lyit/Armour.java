@@ -3,9 +3,9 @@
  *
  * Version information
  *
- * Date 30/01/2021
+ * Date 11/06/2021
  *
- * Author: <Insert your Name and StudentID
+ * Author: <Michael Norman L00162933
  *
  * Copyright notice
  */
@@ -28,7 +28,8 @@ public class Armour extends Item {
         return armourDefence;
     }
 
-    public void setArmourDefence(int armourDefence) {
+    public void setArmourDefence(int armourDefence) throws IllegalArgumentException {
+        if (armourDefence < 0) throw new IllegalArgumentException("Armour defence must be 0 or greater");
         this.armourDefence = armourDefence;
     }
 
@@ -36,7 +37,8 @@ public class Armour extends Item {
         return armourHealth;
     }
 
-    public void setArmourHealth(int armourHealth) {
+    public void setArmourHealth(int armourHealth) throws IllegalArgumentException{
+        if (armourHealth < 0) throw new IllegalArgumentException("Armour health must be 0 or greater");
         this.armourHealth = armourHealth;
     }
 
@@ -64,8 +66,9 @@ public class Armour extends Item {
     // Constructor
     // If an invalid argument is provided throw an IllegalArgumentException exception
 
-    public Armour(String itemName, double itemWeight, double itemValue, int itemMagic, int armourDefence, int armourHealth, boolean equipped, ArmourTypes armourType, ArmourMaterial armourMaterial) {
+    public Armour(String itemName, double itemWeight, double itemValue, int itemMagic, int armourDefence, int armourHealth, boolean equipped, ArmourTypes armourType, ArmourMaterial armourMaterial) throws IllegalArgumentException{
         super(itemName, itemWeight, itemValue, itemMagic);
+        if (armourDefence<0 || armourHealth <1 || armourType ==null || armourMaterial == null) throw new IllegalArgumentException("Invalid armour arguments provided");
         this.armourDefence = armourDefence;
         this.armourHealth = armourHealth;
         this.equipped = equipped;

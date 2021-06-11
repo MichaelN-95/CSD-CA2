@@ -3,9 +3,9 @@
  *
  * Version information
  *
- * Date 30/01/2021
+ * Date 11/06/2021
  *
- * Author: <Insert your Name and StudentID
+ * Author: <Michael Norman L00162933
  *
  * Copyright notice
  */
@@ -14,7 +14,6 @@ package com.lyit;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +45,7 @@ public class GameCharacter {
     }
 
     public void setCharacterName(String characterName) {
+        if (characterName.isBlank())throw new IllegalArgumentException("Character name must not be null or empty");
         this.characterName = characterName;
     }
 
@@ -54,6 +54,7 @@ public class GameCharacter {
     }
 
     public void setHealth(double health) {
+        if (health<0.1 || health > 100)throw new IllegalArgumentException("Health must be greater than 0.1 and no higher than 100");
         this.health = health;
     }
 
@@ -62,6 +63,7 @@ public class GameCharacter {
     }
 
     public void setWeightLimit(double weightLimit) {
+        if (weightLimit<1)throw new IllegalArgumentException("Weight limit must be 1 or higher");
         this.weightLimit = weightLimit;
     }
 
@@ -70,6 +72,7 @@ public class GameCharacter {
     }
 
     public void setTotalWeightOfItems(double totalWeightOfItems) {
+        if (totalWeightOfItems<0 || totalWeightOfItems>weightLimit)throw new IllegalArgumentException("Weight must be 0 or higher and no higher than characters weight limit");
         this.totalWeightOfItems = totalWeightOfItems;
     }
 
@@ -78,6 +81,7 @@ public class GameCharacter {
     }
 
     public void setCharacterState(CharacterState characterState) {
+        if (characterState==null)throw new IllegalArgumentException("Character state cannot be null");
         this.characterState = characterState;
     }
 
@@ -85,6 +89,7 @@ public class GameCharacter {
     // GameCharacter Constructor
     // If an invalid argument is provided throw an IllegalArgumentException exception
     public GameCharacter(String characterName, int health, double weightLimit, int food, CharacterState characterState) {
+        if (characterName.isBlank()||health<0.1 || health > 100 || weightLimit<1||food<0||characterState==null)throw new IllegalArgumentException("Game character given invalid arguments");
         this.characterName = characterName;
         this.health = health;
         this.weightLimit = weightLimit;

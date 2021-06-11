@@ -1,5 +1,15 @@
 package com.lyit;
-
+/*
+ * Test
+ *
+ * Version information
+ *
+ * Date 11/06/2021
+ *
+ * Author: <Michael Norman L00162933
+ *
+ * Copyright notice
+ */
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -8,8 +18,7 @@ import java.util.Arrays;
 import static org.testng.Assert.*;
 
 public class GameCharacterTest {
-    GameCharacter apollo = new GameCharacter("Apollo", 100,150,0,CharacterState.Dead);
-
+    GameCharacter apollo = new GameCharacter("Apollo", 100,150,0,CharacterState.Idle);
     @Test
     public void testPickUpItem() {
         Item test = new Item("Ring",20,10,0);

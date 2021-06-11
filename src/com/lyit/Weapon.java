@@ -3,9 +3,9 @@
  *
  * Version information
  *
- * Date 30/01/2021
+ * Date 11/06/2021
  *
- * Author: <Insert your Name and StudentID
+ * Author: <Michael Norman L00162933
  *
  * Copyright notice
  */
@@ -26,6 +26,7 @@ public class Weapon extends  Item {
     }
 
     public void setWeaponHitStrength(int weaponHitStrength) {
+        if (weaponHitStrength <0)throw new IllegalArgumentException("Weapon hit strength must be greater than 0");
         this.weaponHitStrength = weaponHitStrength;
     }
 
@@ -33,6 +34,7 @@ public class Weapon extends  Item {
         return weaponHealth;
     }
     public void setWeaponHealth(int weaponHealth) {
+        if (weaponHealth <1)throw new IllegalArgumentException("Weapon health must be 1 or greater");
         this.weaponHealth = weaponHealth;
     }
 
@@ -56,6 +58,7 @@ public class Weapon extends  Item {
     // If an invalid argument is provided throw an IllegalArgumentException exception
     public Weapon(String itemName, double itemWeight, double itemValue, int itemMagic, int weaponHitStrength, int weaponHealth, boolean doubleHanded) {
         super(itemName, itemWeight, itemValue, itemMagic);
+        if (weaponHitStrength <0 || weaponHealth <1)throw new IllegalArgumentException("Invalid weapon arguments provided");
         this.weaponHitStrength = weaponHitStrength;
         this.weaponHealth = weaponHealth;
         this.doubleHanded = doubleHanded;
