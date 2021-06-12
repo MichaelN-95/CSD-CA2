@@ -49,6 +49,7 @@ public class GameCharacter {
         this.characterName = characterName;
     }
 
+    //added rounding for 2 decimal places
     public double getHealth() {
         return Math.round(health*100.00)/100.00;
     }
@@ -94,7 +95,6 @@ public class GameCharacter {
         this.health = health;
         this.weightLimit = weightLimit;
         this.characterState = characterState;
-        //TODO - Complete this method
     }
 
 
@@ -110,10 +110,15 @@ public class GameCharacter {
     // Return true if the item was food and consumed, otherwise false
     public boolean eat(int inventoryFoodIndex) {
         if (isCharDead()) {
+            //getting item from inventory
             Item selectedItem = (Item) inventory.get(inventoryFoodIndex);
             double calories = 0.00;
+
+            //if item is food get the amount of base calories
             if (selectedItem instanceof Food) {
                 calories = (((selectedItem.getItemWeight() / 100) * ((Food) selectedItem).getCalories()));
+
+                //depending on the food state modify the health gain
                 switch (((Food) selectedItem).getFoodState()) {
                     case Fresh -> {
                         health += (calories / 25.00);
@@ -148,10 +153,16 @@ public class GameCharacter {
 
     public String attack(GameCharacter targetCharacter) {
         if (isCharDead()) {
+
+            //setting up the target character name for cleaner output
             String targetName = targetCharacter.getCharacterName();
             List<Weapon> weapons;
             String returnString;
+
+            //getting all weapons in the inventory via a stream then checking which ones are equipped and adding those to a list
             weapons= inventory.stream().filter(weapon -> weapon instanceof Weapon).map(weapon -> (Weapon)weapon).filter(Weapon::isWeaponEquipped).collect(Collectors.toList());
+
+            //depending on the number of weapons held print accordingly
             if (weapons.size() >1){
                 returnString = this.characterName + " is attacking " + targetName+ " with a " + weapons.get(0).getItemName() + " and a " + weapons.get(1).getItemName();
             }else {
@@ -184,6 +195,7 @@ public class GameCharacter {
                         }
                     }
                 }
+                //set the slected weapon as equiped
                 selected.setWeaponEquipped(true);
                 return true;
             }
@@ -199,6 +211,7 @@ public class GameCharacter {
     // Weapons that are unequipped remain in the inventory.
     public boolean unEquipWeapon(int inventoryWeaponIndex){
         if (isCharDead()) {
+            //getting weapon in inventory and checking if its a weapon then un-equipping it
             if(inventory.get(inventoryWeaponIndex) instanceof Weapon){
                 ((Weapon) inventory.get(inventoryWeaponIndex)).setWeaponEquipped(false);
                 return true;
@@ -242,6 +255,7 @@ public class GameCharacter {
     // takes off the piece of armour but it remains in their inventory
     public void removeArmour(int armourIndex){
         if (isCharDead()) {
+            //checking if selected index is armour then setting it as un-equipped
             if(inventory.get(armourIndex) instanceof Armour){
                 ((Armour) inventory.get(armourIndex)).setEquipped(false);
             }
@@ -277,6 +291,7 @@ public class GameCharacter {
     public void sleep(){
         if (isCharDead()) {
             this.characterState = CharacterState.Sleeping;
+            //set state then add 20 hp if its lower or equal to 80, if higher set it to 100 to avoid overflow
             if (health<=80){
                 health+=20;
             }
@@ -302,6 +317,7 @@ public class GameCharacter {
     // The item object may be an instance of the Item or any subclass (armour, weapon or food)
     public void pickUpItem(Item item){
         if (isCharDead()){
+            //checking if item to be picked up will exceed the char weight limit, if not add to inventory and add weight to total
             if (getTotalWeightOfItems() + item.getItemWeight() <= getWeightLimit()){
                 totalWeightOfItems += item.getItemWeight();
                 inventory.add(item);
@@ -315,6 +331,7 @@ public class GameCharacter {
     // The item object may be an instance of the Item or any subclass (armour, weapon or food)
     public void dropItem(Item item){
         if (isCharDead()){
+            //checking if item is in inventory and then removing it and its weight from total
             if (inventory.contains(item)){
                 totalWeightOfItems -= item.getItemWeight();
                 inventory.remove(item);
@@ -328,8 +345,10 @@ public class GameCharacter {
     public double getCharacterDefence() {
         if (isCharDead()) {
             double totalDefence =0;
+
+            //looping through all items in inventory
             for (Object check: inventory) {
-                //if item is armour assign to a temp armour item and set equiped to false
+                //if item is armour and is equipped add its defence stat to the total
                 if (check instanceof Armour && ((Armour) check).isEquipped()){
                     totalDefence += ((Armour) check).getArmourDefence();
                 }
@@ -346,7 +365,7 @@ public class GameCharacter {
         if (isCharDead()) {
             double totalAttack =0;
             for (Object check: inventory) {
-                //if item is armour assign to a temp armour item and set equiped to false
+                //if item is armour and is equipped add its attack stats to the total
                 if (check instanceof Weapon && ((Weapon) check).isWeaponEquipped()){
                     totalAttack += ((Weapon) check).getWeaponHitStrength();
                 }
@@ -359,7 +378,7 @@ public class GameCharacter {
     // Note - You can implement additional supporting private methods if you want. Add them below this section
     // Additional methods ------------------------------------------------------------------------------------
 
-    //additional method returns if char is dead, cleans up if statements above
+    //additional method returns if char is not dead, cleans up if statements above
     private boolean isCharDead(){
         return this.characterState != CharacterState.Dead;
     }

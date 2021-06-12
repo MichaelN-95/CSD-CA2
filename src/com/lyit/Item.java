@@ -63,7 +63,7 @@ public class Item {
     // Constructor
     // If an invalid argument is provided throw an IllegalArgumentException exception
     public Item(String itemName, double itemWeight, double itemValue, int itemMagic) throws IllegalArgumentException{
-        if (itemName ==null || itemWeight <1 || itemValue <0 || itemMagic <0)throw new IllegalArgumentException("Invalid Item arguments provided");
+        if (itemName ==null || itemName.isBlank()|| itemWeight <1 || itemValue <0 || itemMagic <0)throw new IllegalArgumentException("Invalid Item arguments provided");
         this.itemName = itemName;
         this.itemWeight = itemWeight;
         this.itemValue = itemValue;
