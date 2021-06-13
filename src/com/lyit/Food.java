@@ -53,7 +53,7 @@ public class Food extends Item {
     // If an invalid argument is provided throw an IllegalArgumentException exception
     public Food(String itemName, double itemWeight, double itemValue, int itemMagic, FoodState foodState, double foodWeight, int calories) {
         super(itemName, itemWeight, itemValue, itemMagic);
-        if (foodState ==null || foodWeight <1 || calories <0)throw new IllegalArgumentException("Invalid Food arguments provided");
+        if (foodState ==null || foodWeight <1)throw new IllegalArgumentException("Invalid Food arguments provided");
 
         this.foodState = foodState;
         this.calories = calories;

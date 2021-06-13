@@ -1,0 +1,19 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="TestSuite" verbose="1" >
+    <test name="Run All" >
+        <classes>
+            <class name="com.lyit.ArmourTest" />
+            <class name="com.lyit.FoodTest" />
+            <class name="com.lyit.GameCharacterTest" />
+            <class name="com.lyit.ItemTest" />
+            <class name="com.lyit.WeaponTest" />
+        </classes>
+    </test>
+
+    <test name="JustItemTest">
+        <classes>
+            <class name="com.lyit.ItemTest" />
+        </classes>
+    </test>
+</suite>

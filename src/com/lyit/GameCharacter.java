@@ -45,7 +45,7 @@ public class GameCharacter {
     }
 
     public void setCharacterName(String characterName) {
-        if (characterName.isBlank())throw new IllegalArgumentException("Character name must not be null or empty");
+        if (characterName == null || characterName.isBlank())throw new IllegalArgumentException("Character name must not be null or empty");
         this.characterName = characterName;
     }
 
@@ -90,7 +90,7 @@ public class GameCharacter {
     // GameCharacter Constructor
     // If an invalid argument is provided throw an IllegalArgumentException exception
     public GameCharacter(String characterName, int health, double weightLimit, int food, CharacterState characterState) {
-        if (characterName.isBlank()||health<0.1 || health > 100 || weightLimit<1||food<0||characterState==null)throw new IllegalArgumentException("Game character given invalid arguments");
+        if (characterName == null ||characterName.isBlank()||health<0.1 || health > 100 || weightLimit<1||food<0||characterState==null)throw new IllegalArgumentException("Game character given invalid arguments");
         this.characterName = characterName;
         this.health = health;
         this.weightLimit = weightLimit;
